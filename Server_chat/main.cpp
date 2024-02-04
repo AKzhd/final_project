@@ -9,9 +9,7 @@
 
 int main(int argc, char *argv[])
 {
-    // QCoreApplication a(argc, argv);
-    // if(!createConnection())
-    //     return 1;
+
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
@@ -34,10 +32,8 @@ int main(int argc, char *argv[])
     engine.load(url);
     if(!createConnection())
         return 1;
-    //createConnection();
     if(!createTables())
         return 1;
-
     return app.exec();
 
 }
