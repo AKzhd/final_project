@@ -1,10 +1,10 @@
-QT       += core gui network qml sql
+QT       += core gui network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
-RESOURCES += \
-    qml.qrc
+# RESOURCES += \
+#     qml.qrc
 TARGET = QT_PSQL
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -14,17 +14,20 @@ TARGET = QT_PSQL
 SOURCES += \
     # Chat.cpp \
     TcpServer.cpp \
-    main.cpp
+    main.cpp \
+    mainwindow.cpp \
+    pgsql.cpp
 
 HEADERS += \
     # Chat.hpp \
     # Message.hpp \
-    TcpServer.hpp \
     # User.hpp \
-    pgsql.hpp
+    TcpServer.h \
+    mainwindow.h \
+    pgsql.h
 
 FORMS += \
-    TcpServer.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -1,5 +1,5 @@
-#ifndef TCPSERVER_HPP
-#define TCPSERVER_HPP
+#ifndef TCPSERVER_H
+#define TCPSERVER_H
 
 #include <QObject>
 #include <QTcpServer>
@@ -31,4 +31,4 @@ private:
     QHash<QString, QTcpSocket*> _clients;
 };
 
-#endif // TCPSERVER_HPP
+#endif // TCPSERVER_H

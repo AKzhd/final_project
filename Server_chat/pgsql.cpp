@@ -1,74 +1,45 @@
-#include "pgsql.hpp"
-
-#ifndef PGSQL_H
-#define PGSQL_H
-
-#include <QMessageBox>
-#include <QCoreApplication>
-#include <QtSql>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlError>
+#include "pgsql.h"
 
 
-inline bool createConnection()
-{ QSqlDatabase    db = QSqlDatabase::addDatabase("QPSQL");
-    db.setDatabaseName("postgres");
-    db.setUserName("postgres");
-    db.setPassword("postgres");
-    db.setPort(5432);
-    db.setHostName("127.0.0.1");
-    if (!db.open()){
-        QMessageBox::warning(0,"Error",db.lastError().text());
-        return false;
+std::vector<std::string> getUserList()
+{    std::vector<std::string> userList;
+    std::vector<QString> QuserList;
+    QSqlQueryModel *model = new QSqlQueryModel;
+    model->setQuery("SELECT email FROM registration_data where status = 'active'");
+
+    for (int row = 0; row < model->rowCount(); ++row) {
+        auto email = model->data(model->index(row, 0)).toString();
+        QuserList.push_back(email);
+    };
+    for (const auto &qstr : QuserList) {
+        userList.push_back(qstr.toStdString());
     }
-    else
-    {
-        QMessageBox::information(0,"Success","The connection to the database is established");
-        return true;
-    }
+    return userList;
 }
 
-inline bool createTables()
+QString getid(QString Qemail)
 {
-    QSqlQuery query;
-    query.exec("CREATE TABLE users("
-               "id serial PRIMARY KEY,"
-               "login VARCHAR(255) NOT NULL UNIQUE,"
-               "name VARCHAR(255),"
-               "password VARCHAR(255))");
-
-
-    query.exec("CREATE TABLE messages("
-               "id serial PRIMARY KEY,"
-               "sender VARCHAR(255),"
-               "name VARCHAR(255),"
-               "recipient VARCHAR(255),"
-               "message TEXT)");
-
-
-    inline bool selectFromTables()
-    {
-        QSqlQuery query;
-        query.exec("SELECT name, salary FROM employee WHERE salary > 50000");
-    }
-
-
-    inline bool selectFromTables()
-    {
-        QSqlQuery query;
-        query.exec("INSERT INTO users (login, name,password) "
-                   "VALUES ('Andrew', 'Andrew Zhdan', hgsyws)");
-    }
-
-    QSqlQuery query_update;
-    query_update.exec("UPDATE employee SET salary = 70000 WHERE id = 1003");
-
-    QSqlQuery query_delete;
-    query_delete.exec("DELETE FROM employee WHERE id = 1007");
-
-    return (1);
+    QString id_user_sender;
+    QSqlQueryModel *model = new QSqlQueryModel;
+    model->setQuery("SELECT id_user FROM registration_data WHERE (email=\'"+Qemail+"\')");
+    if (model->rowCount() > 0)
+    {        QModelIndex index = model->index(0, 0);
+        id_user_sender = model->data(index).toString();
+    };
+    return id_user_sender;
 
 }
 
-#endif // PGSQL_H
+QString getQemail(QString Qid)
+{
+    QString Qmale;
+    QSqlQueryModel *model = new QSqlQueryModel;
+
+    model->setQuery("SELECT email FROM registration_data WHERE (id_user=\'"+Qid+"\')");
+    if (model->rowCount() > 0)
+    {        QModelIndex index = model->index(0, 0);
+        Qmale = model->data(index).toString();
+    };
+    return Qmale;
+
+}

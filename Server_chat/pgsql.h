@@ -7,6 +7,11 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QWidget>
+#include <QMainWindow>
+#include <QSql>
+#include <QSqlQueryModel>
+
 
 
 inline bool createConnection()
@@ -30,24 +35,24 @@ inline bool createConnection()
 inline bool createTables()
 {
     QSqlQuery query;
-    query.exec("CREATE TABLE Registration_DATA ("
+     query.exec("CREATE TABLE Registration_DATA ("
                "id_USER SERIAL,"
                "Email character varying(200) NOT NULL,"
                "status character varying(100) CHECK (status IN ('active', 'inactive')) default 'active');");
 
-    query.exec("CREATE TABLE Authorization_DATA ("
+     query.exec("CREATE TABLE Authorization_DATA ("
                "id SERIAL, id_USER integer NOT NULL, "
                "Password character varying(200) default NULL);");
 
-    query.exec("CREATE TABLE History_DATA ("
+     query.exec("CREATE TABLE History_DATA ("
                "id_Message SERIAL,id_Sender integer NOT NULL, "
                "Message text NOT NULL,SEND_ON date Default current_date);");
 
-    query.exec("CREATE TABLE History_private_DATA ("
+     query.exec("CREATE TABLE History_private_DATA ("
                "id_Message SERIAL,id_Sender integer NOT NULL, id_Receiver integer NOT NULL, "
                "Message text NOT NULL,SEND_ON date Default current_date);");
 
-    query.exec("CREATE OR REPLACE FUNCTION auto_id() "
+     query.exec("CREATE OR REPLACE FUNCTION auto_id() "
                "RETURNS TRIGGER AS $auto_id$ "
                "BEGIN "
                "   INSERT INTO authorization_data (id_user) "
@@ -61,7 +66,7 @@ inline bool createTables()
      query.exec("CREATE TRIGGER auto_id AFTER INSERT OR UPDATE ON registration_data "
                "FOR EACH ROW EXECUTE PROCEDURE auto_id();");
 
-query.exec("CREATE OR REPLACE FUNCTION delete_id() RETURNS TRIGGER AS $delete_id_authorization_data$ \
+     query.exec("CREATE OR REPLACE FUNCTION delete_id() RETURNS TRIGGER AS $delete_id_authorization_data$ \
             BEGIN \
               DELETE FROM authorization_data \
               WHERE id IN (SELECT authorization_data.id_user \
@@ -71,76 +76,23 @@ query.exec("CREATE OR REPLACE FUNCTION delete_id() RETURNS TRIGGER AS $delete_id
               RETURN NEW; \
             END; \
             $delete_id_authorization_data$ LANGUAGE plpgsql;");
-
-     query.exec("CREATE TRIGGER delete_id AFTER UPDATE \
-            ON registration_data FOR EACH ROW EXECUTE PROCEDURE delete_id();");
-
-    query.exec("ALTER TABLE registration_data ADD CONSTRAINT id_user PRIMARY KEY (id_user);");
+     query.exec("CREATE TRIGGER delete_id AFTER UPDATE ON registration_data FOR EACH ROW EXECUTE PROCEDURE delete_id();");
+     query.exec("ALTER TABLE registration_data ADD CONSTRAINT id_user PRIMARY KEY (id_user);");
      query.exec("ALTER TABLE authorization_data ADD CONSTRAINT id PRIMARY KEY (id);");
-    query.exec("ALTER TABLE history_data ADD CONSTRAINT id_message PRIMARY KEY (id_message);");
+     query.exec("ALTER TABLE history_data ADD CONSTRAINT id_message PRIMARY KEY (id_message);");
      query.exec("ALTER TABLE history_private_data ADD CONSTRAINT id_message PRIMARY KEY (id_message);");
-    query.exec("ALTER TABLE authorization_data ADD FOREIGN KEY (id_user) REFERENCES registration_data (id_user);");
+     query.exec("ALTER TABLE authorization_data ADD FOREIGN KEY (id_user) REFERENCES registration_data (id_user);");
      query.exec("ALTER TABLE history_data ADD FOREIGN KEY (id_sender) REFERENCES registration_data (id_user);");
-    query.exec("ALTER TABLE history_private_data ADD FOREIGN KEY (id_sender) REFERENCES registration_data (id_user);");
+     query.exec("ALTER TABLE history_private_data ADD FOREIGN KEY (id_sender) REFERENCES registration_data (id_user);");
      query.exec("ALTER TABLE history_private_data ADD FOREIGN KEY (id_receiver) REFERENCES registration_data (id_user);");
 
 
     return (1);
 
 }
-
-// inline bool selectFromTables()
-// {
-// QSqlQuery query;
-// query.exec("SELECT name, salary FROM employee WHERE salary > 50000");
-// }
-
-
-// inline bool insertToTables()
-// {
-//     QSqlQuery query;
-//     query.exec("INSERT INTO users (id, login, name,password) "
-//                "VALUES (default, 'Andrew', 'Andrew Zhdan', 'xui')");
-//     return (1);
-// }
-
-// QSqlQuery query_update;
-// query_update.exec("UPDATE employee SET salary = 70000 WHERE id = 1003");
-
-// QSqlQuery query_delete;
-// query_delete.exec("DELETE FROM employee WHERE id = 1007");
-
-//return (1);
-
-
-// bool Chat::check_login_table(MYSQL &mysql, MYSQL_RES *res, MYSQL_ROW &row, std::string table, std::string log)
-// {
-//     std::string str = "SELECT * FROM " + table + " WHERE login = \'" + log + "\'";
-//     if (mysql_query(&mysql, str.c_str()))
-//         std::cout << " Erorr: сбой проверки логина " << std::endl
-//                   << mysql_error(&mysql) << std::endl;
-//     else
-//     {
-//         res = mysql_use_result(&mysql);
-//         if (res)
-//         {
-//             if (row = mysql_fetch_row(res))
-//             {
-//                 int count = std::stoi(row[0]);
-//                 mysql_free_result(res);
-//                 if (count > 0)
-//                     return false;
-//                 else
-//                     return true;
-//             }
-//         }
-//         mysql_free_result(res);
-//     }
-//     return -1;
-// }
-
-
-
+std::vector<std::string> getUserList();
+QString getid(QString Qemail);
+QString getQemail(QString Qid);
 
 
 
