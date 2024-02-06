@@ -32,7 +32,7 @@ void connect::on_buttonBox_accepted()
     {w->show();}
     else {close();};//если не создано ни одной базы, мы выходим
     this->close();//закрываем текущий виджет
-     this->setAttribute(Qt::WA_DeleteOnClose);//удаляет виджет при закрытии и попадаем в деструктор, чтоб не засорял память
+    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "pgsql.h"
 #include <QSqlRecord>
+#include "logform.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,7 +18,7 @@ public:
 
     explicit MainWindow(int userId,QString Qemail,QWidget *parent = nullptr);//конструктор
     ~MainWindow();
-    static MainWindow* createClient();// тестовая функция для переключения в StartScreen, через кнопку another client
+    static MainWindow* createClient();
     static int kInstanceCount;//Cancel не будет приводить к закрытию программы
 
 private slots:

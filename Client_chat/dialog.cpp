@@ -28,7 +28,7 @@ Dialog::~Dialog()
 void Dialog::setLoginForm()
 {
     //ui->stackedWidget->setCurrentWidget(0);//0-индекс страницы(page) виджет LoginForm
-    QWidget* widget = findChild<QWidget*>("LogWidget");
+    QWidget* widget = findChild<QWidget*>("LogWiget");
     ui->stackedWidget->setCurrentWidget(widget);
 }
 

@@ -6,6 +6,7 @@
 #include <QListWidget>
 #include <QTimer>
 
+
 int MainWindow::kInstanceCount=0;
 
 MainWindow::MainWindow(int userId,QString Qemail,QWidget *parent) :
@@ -15,7 +16,7 @@ MainWindow::MainWindow(int userId,QString Qemail,QWidget *parent) :
     m_Qemail(Qemail)
 {
     ui->setupUi(this);
-    kInstanceCount++;
+   kInstanceCount++;
     auto timer=new QTimer(this);//завели новый таймер, будет периодически обновлять поля с сообщениями
     connect(timer,&QTimer::timeout,this,&MainWindow::updateChats);//каждый раз как срабатывает таймер,обновляется чат(информация из БД)
     timer->start(10);//таймер срабатывает раз в 10 миллисекунд
@@ -24,13 +25,13 @@ MainWindow::MainWindow(int userId,QString Qemail,QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    kInstanceCount--;
+   kInstanceCount--;
     if(kInstanceCount<=0){qApp->exit(0);};
 }
 
 MainWindow *MainWindow::createClient()
 {
-   Dialog s;
+    Dialog s;
     auto result=s.exec();
     if(result==QDialog::Rejected)//QDialog::Rejected = 0
     {return nullptr;};//мы ничего не создали

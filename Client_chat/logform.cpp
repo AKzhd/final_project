@@ -34,7 +34,7 @@ void LogForm::on_buttonBox_accepted()//  Ok
                               tr("Error"),
                               tr("Wrong Password"));
         return;
-    default://все хорошо
+    default:
 
         QMessageBox::information(0,"Успешно", "Добро пожаловать в чат!");
 
